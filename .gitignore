@@ -1,3 +1,6 @@
+# Build, tests, linter reports
+dist
+
 # IDEs and editors
 /.idea
 .project
