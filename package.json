@@ -1,30 +1,36 @@
 {
   "name": "blutchat-service",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Node.JS server for BlutChat application",
-  "main": "dist/index.js",
+  "main": "dist/app.js",
   "scripts": {
-    "start": "tsc && node dist/index.js",
-    "lint": "eslint . --ext .ts"
+    "start": "tsc && node dist/app.js",
+    "lint": "eslint . --ext .ts",
+    "db:migrate": "cross-env NODE_ENV=local sequelize db:migrate",
+    "db:seed": "cross-env NODE_ENV=local sequelize db:seed:all"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/skorodumoviktor/BlutChat.Service.git"
   },
   "author": "Viktor Skorodumov <skorodumoviktor@gmail.com>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/skorodumoviktor/BlutChat.Service/issues"
-  },
+  "license": "UNLICENSED",
   "homepage": "https://github.com/skorodumoviktor/BlutChat.Service#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "pg": "^8.6.0",
+    "pg-hstore": "^2.3.4",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.6.2",
+    "sequelize-cli": "^6.2.0",
+    "typedi": "^0.10.0"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.0",
     "@types/express": "^4.17.11",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
+    "cross-env": "^7.0.3",
     "eslint": "^7.23.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.1.0",
