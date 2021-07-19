@@ -4,9 +4,8 @@
   "description": "Node.JS server for BlutChat application",
   "main": "dist/index.js",
   "scripts": {
-    "start": "npx tsc && node dist/index.js",
-    "lint": "eslint . --ext .ts",
-    "eslint": "eslint --init"
+    "start": "npx --no-install tsc && node dist/index.js",
+    "lint": "eslint . --ext .ts --fix"
   },
   "repository": "git+https://github.com/skorodumoviktor/BlutChat.Service.git",
   "author": "Viktor Skorodumov <skorodumoviktor@gmail.com>",
