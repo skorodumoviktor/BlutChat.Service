@@ -22,10 +22,10 @@ export class DbService {
   public pool: Pool;
 
   constructor(@Logger('DbService') private logger: LoggerInterface) {
-    const connectionString = process.env.DATABASE_URI;
+    const connectionString = process.env.DATABASE_URL;
 
     if (!connectionString) {
-      throw new Error('DbService DATABASE_URI is not provided');
+      throw new Error('DbService DATABASE_URL is not provided');
     }
 
     this.pool = new Pool({
