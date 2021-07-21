@@ -8,7 +8,7 @@ import { Api } from './api';
 dotenv.config();
 
 try {
-  const api = Container.get(Api);
+  const api = Container.get(Api); // init Api
   const apiPort = process.env.PORT;
   if (!apiPort) throw new Error('PORT is not provided');
   api.app.listen(Number(apiPort));

@@ -7,6 +7,11 @@ export class UserController {
   constructor(private userService: UserService) {
   }
 
+  init = async () => {
+    await this.userService.createTable();
+    await this.userService.seedTable();
+  };
+
   getAll = async (req: Request, res: Response) => {
     const users = await this.userService.getAll();
     res.status(200).json({ users });
