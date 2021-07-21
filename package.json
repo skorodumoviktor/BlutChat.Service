@@ -7,7 +7,7 @@
     "start": "npx --no-install tsc && node dist/index.js",
     "lint": "eslint . --ext .ts --fix"
   },
-  "repository": "git+https://github.com/skorodumoviktor/BlutChat.Service.git",
+  "repository": "git+https://github.com/skorodumoviktor/blutchat-service.git",
   "author": "Viktor Skorodumov <skorodumoviktor@gmail.com>",
   "license": "UNLICENSED",
   "dependencies": {
