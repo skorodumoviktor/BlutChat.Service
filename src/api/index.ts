@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { Service } from 'typedi';
 import { UserController } from './components/user/user.controller';
 import { UserRouter } from './components/user/user.router';
@@ -14,7 +14,11 @@ export class Api {
   }
 
   private initRouter = () => {
-    this.app.use('/users', this.userRouter.router);
+    const apiRouter = Router();
+
+    apiRouter.use('/users', this.userRouter.router);
+
+    this.app.use('/api', apiRouter);
   };
 
   private initComponents = async () => Promise.all([this.userController.init()]);
