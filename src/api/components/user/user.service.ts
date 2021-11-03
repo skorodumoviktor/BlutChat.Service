@@ -46,18 +46,15 @@ export class UserService {
   });
 
   seedTable = async () => {
-    this.db
-      .knex(this.tableName)
-      .insert({ fullName: 'Test User' })
-      .then(() => true)
-      .catch((error) => {
-        this.logger.error(error);
-        return false;
-      });
+    this.add({ fullName: 'Seed User' });
   };
 
-  createTable = async () => this.db.knex.schema.createTable(this.tableName, (table) => {
-    table.increments('userId');
-    table.string('fullName', 250);
-  });
+  createTable = async () => this.db.knex.schema
+    .createTable(this.tableName, (table) => {
+      table.increments('userId');
+      table.string('fullName', 250);
+    })
+    .catch((error) => {
+      this.logger.error(error);
+    });
 }

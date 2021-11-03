@@ -59,6 +59,6 @@ export class UserController {
 
   initDb = async () => {
     await this.userService.createTable();
-    // await this.userService.seedTable();
+    await this.userService.seedTable();
   };
 }
