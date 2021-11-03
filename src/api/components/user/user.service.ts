@@ -1,5 +1,5 @@
 import { Service } from 'typedi';
-import { DbService } from '../../../services/db';
+import { DbService } from '../../../services/db.service';
 import { Logger, LoggerInterface } from '../../../services/logger';
 import { TABLE_NAME } from './user.const';
 import { User } from './user.model';
@@ -12,9 +12,9 @@ export class UserService {
     @Logger('UserService') private logger: LoggerInterface,
   ) {}
 
-  delete = async (userId: string): Promise<boolean> => this.db
+  delete = async (id: string): Promise<boolean> => this.db
     .knex(TABLE_NAME)
-    .where('userId', userId)
+    .where('id', id)
     .delete()
     .then(() => true)
     .catch((error) => {
@@ -22,18 +22,18 @@ export class UserService {
       return false;
     });
 
-  add = async (user: UserToAdd): Promise<boolean> => this.db
+  add = async (userToAdd: UserToAdd): Promise<boolean> => this.db
     .knex(TABLE_NAME)
-    .insert(user)
+    .insert(userToAdd)
     .then(() => true)
     .catch((error) => {
       this.logger.error(error);
       return false;
     });
 
-  getById = async (userId: string): Promise<User | null> => this.db
+  getById = async (id: string): Promise<User | null> => this.db
     .knex(TABLE_NAME)
-    .where<User[]>('userId', userId)
+    .where<User[]>('id', id)
     .then((result) => result[0])
     .catch((error) => {
       this.logger.error(error);

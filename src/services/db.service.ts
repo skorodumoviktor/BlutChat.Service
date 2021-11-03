@@ -1,22 +1,20 @@
 import { Service } from 'typedi';
 import Knex, { Knex as KnexType } from 'knex';
-import { Logger, LoggerInterface } from '../logger';
+import { Logger, LoggerInterface } from './logger';
+import { ConfigService } from './config.service';
 
 @Service()
 export class DbService {
   public knex: KnexType;
 
-  constructor(@Logger('DbService') logger: LoggerInterface) {
-    const connectionString = process.env.DATABASE_URL;
-
-    if (!connectionString) {
-      throw new Error('DbService DATABASE_URL is not provided');
-    }
-
+  constructor(
+  @Logger('DbService') logger: LoggerInterface,
+    configService: ConfigService,
+  ) {
     this.knex = Knex({
       client: 'pg',
       connection: {
-        connectionString,
+        connectionString: configService.databaseUrl,
         ssl: { rejectUnauthorized: false },
       },
     });

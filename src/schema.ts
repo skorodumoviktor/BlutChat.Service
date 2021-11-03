@@ -7,9 +7,13 @@ import { Api } from './api';
 
 dotenv.config();
 
-try {
-  const api = Container.get(Api);
-  api.initSchemas();
-} catch (error) {
-  console.error('ERROR', (<{ message: string }>error).message);
+async function main() {
+  try {
+    const api = Container.get(Api);
+    await api.initSchemas();
+  } catch (error) {
+    console.error('ERROR', (<{ message: string }>error).message);
+  }
 }
+
+main();

@@ -1,20 +1,28 @@
 import { Router } from 'express';
 import { Service } from 'typedi';
+import { AuthMiddleware } from '../../middleware/auth.middleware';
 import { UserController } from './user.controller';
 
 @Service()
 export class UserRouter {
   router: Router;
 
-  constructor(userController: UserController) {
-    this.router = Router({ mergeParams: true });
+  constructor(
+    private userController: UserController,
+    private authMiddleware: AuthMiddleware,
+  ) {
+    const router = Router({ mergeParams: true });
 
-    this.router.route('/').get(userController.getAll);
-    this.router.route('/').post(userController.register);
+    router
+      .route('/')
+      .get([this.authMiddleware.verifyToken, this.userController.getAll]);
+    router.route('/').post(this.userController.register);
 
-    this.router.route('/login').post(userController.login);
+    router.route('/login').post(this.userController.login);
 
-    this.router.route('/:userId').get(userController.getById);
-    this.router.route('/:userId').delete(userController.delete);
+    router.route('/:userId').get(this.userController.getById);
+    router.route('/:userId').delete(this.userController.delete);
+
+    this.router = router;
   }
 }

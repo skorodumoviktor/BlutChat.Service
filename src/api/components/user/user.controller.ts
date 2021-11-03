@@ -7,11 +7,14 @@ import {
   LoginBody, RegisterBody, UserResponse, UserToAdd,
 } from './user.types';
 import { API_MESSAGE_500, EMAIL_REGEX, PASSWORD_REGEX } from '../../const';
-import { config } from '../../config';
+import { ConfigService } from '../../../services/config.service';
 
 @Service()
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private configService: ConfigService,
+  ) {}
 
   getAll = async (_: Request, res: Response) => {
     const users = await this.userService.getAll();
@@ -19,9 +22,9 @@ export class UserController {
   };
 
   getById = async (req: Request, res: Response) => {
-    const userId = req.params.userId as string;
-    if (userId) {
-      const user = await this.userService.getById(userId);
+    const id = req.params.id as string;
+    if (id) {
+      const user = await this.userService.getById(id);
       if (!user) res.status(404).send('User not found');
       res.status(200).json(user);
     } else {
@@ -35,6 +38,7 @@ export class UserController {
     const validationResult = this.validateRegisterBody(body);
     if (validationResult) {
       res.status(400).send(validationResult);
+      return;
     }
 
     const existingUser = await this.userService.getByEmail(body.email);
@@ -42,13 +46,17 @@ export class UserController {
       res
         .status(409)
         .send('Provided email is already registered. Please login');
+      return;
     }
 
-    const hashedPassword = await bcrypt.hash(body.password, 10);
-    const userToAdd: UserToAdd = { ...body, password: hashedPassword };
+    const encodedPassword = await bcrypt.hash(body.password, 10);
+    const userToAdd: UserToAdd = { ...body, password: encodedPassword };
 
     const success = await this.userService.add(userToAdd);
-    if (!success) res.status(500).send(API_MESSAGE_500);
+    if (!success) {
+      res.status(500).send(API_MESSAGE_500);
+      return;
+    }
 
     res.status(200).end('Successfully registered! Please login');
   };
@@ -58,6 +66,7 @@ export class UserController {
 
     if (!(email && password)) {
       res.status(400).send('Email and password are required');
+      return;
     }
 
     const user = await this.userService.getByEmail(email);
@@ -65,17 +74,23 @@ export class UserController {
 
     if (!isValid) {
       res.status(400).send('Invalid credentials');
+      return;
     }
 
     const accessToken = jwt.sign(
       { id: user?.id, email: user?.email },
-      config.jwtSecret,
+      this.configService.jwtToken,
       {
         expiresIn: '24h',
       },
     );
 
-    res.send(200).json({ ...user, accessToken } as UserResponse);
+    res
+      .status(200)
+      .json({
+        ...user,
+        accessToken,
+      } as UserResponse);
   };
 
   delete = async (req: Request, res: Response) => {

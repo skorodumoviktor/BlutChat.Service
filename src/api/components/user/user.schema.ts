@@ -1,5 +1,5 @@
 import { Service } from 'typedi';
-import { DbService } from '../../../services/db';
+import { DbService } from '../../../services/db.service';
 import { Logger, LoggerInterface } from '../../../services/logger';
 import { TABLE_NAME } from './user.const';
 import { UserService } from './user.service';
@@ -8,17 +8,14 @@ import { UserService } from './user.service';
 export class UserSchema {
   constructor(
     @Logger('UserSchema') private logger: LoggerInterface,
-    private db: DbService,
-    private user: UserService,
+    private dbService: DbService,
+    private userService: UserService,
   ) {}
 
-  init = async () => {
-    await this.createTable();
-    await this.seedTable();
-  };
+  init = async () => this.createTable().then(this.seedTable);
 
   seedTable = async () => {
-    this.user
+    this.userService
       .add({
         fullName: 'superuser',
         email: 'skorodumoviktor@gmail.com',
@@ -29,11 +26,11 @@ export class UserSchema {
       });
   };
 
-  createTable = async () => this.db.knex.schema
+  createTable = async () => this.dbService.knex.schema
     .createTable(TABLE_NAME, (table) => {
       table.increments('id');
       table.string('fullName', 250);
-      table.string('password', 16);
+      table.string('password', 500);
       table.string('email', 320);
     })
     .then(() => {
