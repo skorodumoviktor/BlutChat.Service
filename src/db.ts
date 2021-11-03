@@ -9,13 +9,7 @@ dotenv.config();
 
 try {
   const api = Container.get(Api);
-  api.initRouter();
-
-  const apiPort = process.env.PORT;
-  if (!apiPort) throw new Error('PORT is not provided');
-
-  api.app.listen(Number(apiPort));
-  console.log('INFO Api started on port', apiPort);
+  api.initComponentDbs();
 } catch (error) {
   console.error('ERROR', (<{ message: string }>error).message);
 }

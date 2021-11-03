@@ -7,13 +7,14 @@ import { UserRouter } from './components/user/user.router';
 export class Api {
   app: express.Express;
 
-  constructor(private userRouter: UserRouter, private userController: UserController) {
+  constructor(
+    private userRouter: UserRouter,
+    private userController: UserController,
+  ) {
     this.app = express();
-    this.initRouter();
-    this.initComponents();
   }
 
-  private initRouter = () => {
+  initRouter = () => {
     const apiRouter = Router();
 
     apiRouter.use('/users', this.userRouter.router);
@@ -21,5 +22,5 @@ export class Api {
     this.app.use('/api', apiRouter);
   };
 
-  private initComponents = async () => Promise.all([this.userController.init()]);
+  initComponentDbs = async () => Promise.all([this.userController.initDb()]);
 }

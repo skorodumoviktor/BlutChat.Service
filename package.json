@@ -4,29 +4,32 @@
   "description": "Node.JS server for BlutChat application",
   "main": "dist/index.js",
   "scripts": {
-    "start": "npx --no-install tsc && node dist/index.js",
+    "start": "nodemon -e ts ./src/index.ts",
+    "build": "npx --no-install tsc --project tsconfig.json",
+    "init-db": "npx --no-install tsc && node dist/db.js",
     "lint": "eslint . --ext .ts --fix"
   },
   "repository": "git+https://github.com/skorodumoviktor/blutchat-service.git",
   "author": "Viktor Skorodumov <skorodumoviktor@gmail.com>",
   "license": "UNLICENSED",
   "dependencies": {
+    "@types/express": "^4.17.11",
+    "@types/pg": "^8.6.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "knex": "^0.95.12",
     "pg": "^8.6.0",
-    "pg-hstore": "^2.3.4",
     "reflect-metadata": "^0.1.13",
+    "ts-node": "^10.4.0",
     "typedi": "^0.10.0",
-    "typescript": "^4.2.3",
-    "@types/express": "^4.17.11",
-    "@types/pg": "^8.6.0"
+    "typescript": "^4.2.3"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.28.1",
     "@typescript-eslint/parser": "^4.28.1",
-    "cross-env": "^7.0.3",
     "eslint": "^7.30.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
-    "eslint-plugin-import": "^2.23.4"
+    "eslint-plugin-import": "^2.23.4",
+    "nodemon": "^2.0.14"
   }
 }
