@@ -9,11 +9,12 @@ export class UserRouter {
   constructor(userController: UserController) {
     this.router = Router({ mergeParams: true });
 
-    this.router.route('/').get(userController.getAll).post(userController.add);
+    this.router.route('/').get(userController.getAll);
+    this.router.route('/').post(userController.register);
 
-    this.router
-      .route('/:userId')
-      .get(userController.get)
-      .delete(userController.delete);
+    this.router.route('/login').post(userController.login);
+
+    this.router.route('/:userId').get(userController.getById);
+    this.router.route('/:userId').delete(userController.delete);
   }
 }

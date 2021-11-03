@@ -9,7 +9,7 @@ dotenv.config();
 
 try {
   const api = Container.get(Api);
-  api.initComponentDbs();
+  api.initSchemas();
 } catch (error) {
   console.error('ERROR', (<{ message: string }>error).message);
 }

@@ -1,9 +1,17 @@
 /* eslint-disable max-classes-per-file */
 
-export class UserToAdd {
+export class User {
+  id: number;
+
   fullName: string;
+
+  email: string;
+
+  password: string;
 }
 
-export class User extends UserToAdd {
-  userId: number;
+export class UserRole {
+  id: number;
+
+  name: string;
 }

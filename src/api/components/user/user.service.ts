@@ -1,19 +1,19 @@
 import { Service } from 'typedi';
 import { DbService } from '../../../services/db';
 import { Logger, LoggerInterface } from '../../../services/logger';
-import { User, UserToAdd } from './user.model';
+import { TABLE_NAME } from './user.const';
+import { User } from './user.model';
+import { UserToAdd } from './user.types';
 
 @Service()
 export class UserService {
-  private tableName = 'user';
-
   constructor(
     private db: DbService,
     @Logger('UserService') private logger: LoggerInterface,
   ) {}
 
   delete = async (userId: string): Promise<boolean> => this.db
-    .knex(this.tableName)
+    .knex(TABLE_NAME)
     .where('userId', userId)
     .delete()
     .then(() => true)
@@ -22,17 +22,17 @@ export class UserService {
       return false;
     });
 
-  add = async (userToAdd: UserToAdd): Promise<boolean> => this.db
-    .knex(this.tableName)
-    .insert(userToAdd)
+  add = async (user: UserToAdd): Promise<boolean> => this.db
+    .knex(TABLE_NAME)
+    .insert(user)
     .then(() => true)
     .catch((error) => {
       this.logger.error(error);
       return false;
     });
 
-  get = async (userId: string): Promise<User | null> => this.db
-    .knex(this.tableName)
+  getById = async (userId: string): Promise<User | null> => this.db
+    .knex(TABLE_NAME)
     .where<User[]>('userId', userId)
     .then((result) => result[0])
     .catch((error) => {
@@ -40,21 +40,17 @@ export class UserService {
       return null;
     });
 
-  getAll = async (): Promise<User[]> => this.db.knex<User>(this.tableName).catch((error) => {
+  getByEmail = async (email: string): Promise<User | null> => this.db
+    .knex(TABLE_NAME)
+    .where<User[]>('email', email)
+    .then((result) => result[0])
+    .catch((error) => {
+      this.logger.error(error);
+      return null;
+    });
+
+  getAll = async (): Promise<User[]> => this.db.knex<User>(TABLE_NAME).catch((error) => {
     this.logger.error(error);
     return [];
   });
-
-  seedTable = async () => {
-    this.add({ fullName: 'Seed User' });
-  };
-
-  createTable = async () => this.db.knex.schema
-    .createTable(this.tableName, (table) => {
-      table.increments('userId');
-      table.string('fullName', 250);
-    })
-    .catch((error) => {
-      this.logger.error(error);
-    });
 }

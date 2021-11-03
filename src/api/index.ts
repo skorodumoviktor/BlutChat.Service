@@ -1,17 +1,16 @@
 import express, { Router } from 'express';
 import { Service } from 'typedi';
-import { UserController } from './components/user/user.controller';
 import { UserRouter } from './components/user/user.router';
+import { UserSchema } from './components/user/user.schema';
 
 @Service()
 export class Api {
   app: express.Express;
 
-  constructor(
-    private userRouter: UserRouter,
-    private userController: UserController,
-  ) {
-    this.app = express();
+  constructor(private userRouter: UserRouter, private userSchema: UserSchema) {
+    const app = express();
+    app.use(express.json());
+    this.app = app;
   }
 
   initRouter = () => {
@@ -22,5 +21,5 @@ export class Api {
     this.app.use('/api', apiRouter);
   };
 
-  initComponentDbs = async () => Promise.all([this.userController.initDb()]);
+  initSchemas = async () => Promise.all([this.userSchema.init()]);
 }
