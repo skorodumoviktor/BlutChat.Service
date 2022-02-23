@@ -1,5 +1,5 @@
 import { Service } from 'typedi';
-import { DbService } from '../../../services/db';
+import { DbService } from '../../../services/db.service';
 import { Logger, LoggerInterface } from '../../../services/logger';
 import { TABLE_NAME } from './role.const';
 import { Role } from './role.model';
