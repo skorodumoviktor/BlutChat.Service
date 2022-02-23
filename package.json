@@ -4,7 +4,8 @@
   "description": "Node.JS server for BlutChat application",
   "main": "dist/index.js",
   "scripts": {
-    "start": "nodemon -e ts ./src/index.ts",
+    "dev": "nodemon -e ts ./src/index.ts",
+    "start": "node ./dist/index.js",
     "build": "npx --no-install tsc --project tsconfig.json",
     "schema": "npx --no-install tsc && node dist/schema.js",
     "lint": "eslint . --ext .ts --fix"
